@@ -20,4 +20,8 @@ export class User {
 
   @Column({ type: "text" })
   quote: string;
+
+  // TODO: downvotes and upvotes...
+  // Maybe both as lists of user IDs?
+  // Could turn out to be much easer to maintain
 }
