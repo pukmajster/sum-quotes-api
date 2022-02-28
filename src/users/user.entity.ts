@@ -21,14 +21,19 @@ export class User {
   @Column({ type: "text" })
   quote: string;
 
-  // TODO: downvotes and upvotes...
-  // Maybe both as lists of user IDs?
-  // Could turn out to be much easer to maintain
-
   // Caclulated every time a user either upvotes or downvotes a quote
   // = sum of upvotes - sum of downvotes
   //
   // A user can only either upvote or downvote a quote, not both
-  @Column({ type: "int" })
+  @Column({ type: "int", default: 0 })
   score: number;
+
+  // TODO: downvotes and upvotes...
+  // Maybe both as lists of user IDs?
+  // Could turn out to be much easer to maintain
+  @Column('int', { array: true, default: [] })
+  upvotes: number[];
+
+  @Column('int', { array: true, default: [] })
+  downvotes: number[];
 }
