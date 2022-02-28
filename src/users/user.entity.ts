@@ -31,6 +31,7 @@ export class User {
   // TODO: downvotes and upvotes...
   // Maybe both as lists of user IDs?
   // Could turn out to be much easer to maintain
+  // Yes, this doesn't keep track of edit and creation times, but such is life
   @Column('int', { array: true, default: [] })
   upvotes: number[];
 
