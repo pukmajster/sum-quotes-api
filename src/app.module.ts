@@ -16,10 +16,10 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
+      port: 5432,
+      username: 'postgres',
       password: 'root',
-      database: 'test',
+      database: 'quotes-db',
       entities: ["**/*.entity{.ts,.js}", "src/**/**/*.entity{.ts,.js}"],
       synchronize: false,
     }),
