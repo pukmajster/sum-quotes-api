@@ -32,12 +32,13 @@ export class User {
   // Maybe both as lists of user IDs?
   // Could turn out to be much easer to maintain
   // Yes, this doesn't keep track of edit and creation times, but such is life
+  
+  // I'm trying real hard to acomplish all this with just one entity 
   @Column('int', { array: true, default: [] })
   upvotes: number[];
 
   @Column('int', { array: true, default: [] })
   downvotes: number[];
-
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createDateTime: Date;
