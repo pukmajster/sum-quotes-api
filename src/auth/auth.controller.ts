@@ -11,7 +11,7 @@ import {
 import { CreateUserDto } from "./dto/user.dto";
 import { RequestWithUser } from "./interfaces/auth.interfaces";
 import { LocalAuthGuard } from "./local-auth.guard";
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import JwtAuthGuard from "./jwt-auth.guard";
 
 @Controller("")
@@ -38,11 +38,14 @@ export class AuthController {
   @Post("logout")
   async logOut(@Req() request: RequestWithUser) {
     request.res.setHeader("Set-Cookie", this.authService.getCookieForLogOut());
+    return response.sendStatus(200);
   }
 
   @UseGuards(JwtAuthGuard)
   // @Get()
   authenticate(@Req() request: RequestWithUser) {
-    return request.user;
+    const user = request.user;
+    user.password = undefined;
+    return user;
   }
 }
