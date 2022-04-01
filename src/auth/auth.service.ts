@@ -2,13 +2,25 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { TokenPayload } from './interfaces/auth.interfaces';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
+
+  public getCookieWithJwtToken(userId: number) {
+    const payload: TokenPayload = { userId };
+
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      "JWT_EXPIRATION_TIME",
+    )}`;
+  }
 
 /*   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
