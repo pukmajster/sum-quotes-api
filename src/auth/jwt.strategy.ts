@@ -7,10 +7,6 @@ import { UsersService } from 'src/users/users.service';
 import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
 
-export interface TokenPayload {
-  userId: number;
-}
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
