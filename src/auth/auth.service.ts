@@ -98,6 +98,14 @@ export class AuthService {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
   }
 
+  async getById(id: number) {
+    const user = await this.usersRepository.findOne({ id });
+    if (user) {
+      return user;
+    }
+    throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
+  }
+
 /*   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
     if (user && user.password === pass) {

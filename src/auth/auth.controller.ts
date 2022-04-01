@@ -9,10 +9,10 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/user.dto";
-import { JwtAuthGuard } from "./jwt-auth.guard";
 import { RequestWithUser } from "./interfaces/auth.interfaces";
 import { LocalAuthGuard } from "./local-auth.guard";
 import { Request, Response } from "express";
+import JwtAuthGuard from "./jwt-auth.guard";
 
 @Controller("")
 export class AuthController {
