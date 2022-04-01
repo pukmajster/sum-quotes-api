@@ -27,6 +27,7 @@
     "typeorm:migration:run": "npm run typeorm -- migration:run"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.2.0",
     "@nestjs/core": "^8.0.0",
