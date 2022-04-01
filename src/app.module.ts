@@ -4,6 +4,7 @@ import { Connection } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { configService } from './config/config.service';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 
@@ -11,18 +12,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     AuthModule,
     UsersModule,
-
-    // TODO: Move these to an .env
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'root',
-      database: 'quotes-db',
-      entities: ["**/*.entity{.ts,.js}", "src/**/**/*.entity{.ts,.js}"],
-      synchronize: false,
-    }),
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
   ],
   controllers: [AppController],
   providers: [AppService],
