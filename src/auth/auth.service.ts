@@ -7,6 +7,9 @@ import * as bcrypt from "bcrypt";
 import { CreateUserDto } from './dto/user.dto';
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { HttpException } from "@nestjs/common";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +17,23 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private readonly configService: ConfigService,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>
   ) {}
+
+  async getByEmail(email: string) {
+    const user = await this.usersRepository.findOne({ email });
+    if (user) {
+      return user;
+    }
+    throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
+  }
+ 
+  async create(userData: CreateUserDto) {
+    const newUser = await this.usersRepository.create(userData);
+    await this.usersRepository.save(newUser);
+    return newUser;
+  }
 
   public getCookieWithJwtToken(userId: number) {
     const payload: TokenPayload = { userId };
@@ -23,6 +42,27 @@ export class AuthService {
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
       "JWT_EXPIRATION_TIME",
     )}`;
+  }
+
+  public async getAuthenticatedUser(email: string, plainTextPassword: string) {
+    try {
+      const user = await this.usersService.getByEmail(email);
+      await this.verifyPassword(plainTextPassword, user.password);
+      user.password = undefined;
+      return user;
+    } catch (error) {
+      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
+    }
+  }
+   
+  private async verifyPassword(plainTextPassword: string, hashedPassword: string) {
+    const isPasswordMatching = await bcrypt.compare(
+      plainTextPassword,
+      hashedPassword
+    );
+    if (!isPasswordMatching) {
+      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
+    }
   }
 
   public async hashPassword(password: string) {
