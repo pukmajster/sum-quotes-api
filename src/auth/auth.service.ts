@@ -4,6 +4,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from './interfaces/auth.interfaces';
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,12 @@ export class AuthService {
       "JWT_EXPIRATION_TIME",
     )}`;
   }
+
+  public async hashPassword(password: string) {
+    return bcrypt.hash(password, 8);
+  }
+
+  
 
 /*   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
