@@ -30,11 +30,27 @@ export class UsersService {
     return user;
   }
 
+  async getByEmail(email: string) {
+    const user = this.usersRepository.findOne();
+
+    if (user) {
+      return user;
+    }
+
+    throw new HttpException("User not found!", HttpStatus.NOT_FOUND);
+  }
+
   async getById(id: number) {
     const user = await this.usersRepository.findOne({ id });
     if (user) {
       return user;
     }
     throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
+  }
+
+  async changePassword(newPassword: string, user: User) {
+    user.password = newPassword;
+
+    await this.usersRepository.save(user);
   }
 }
