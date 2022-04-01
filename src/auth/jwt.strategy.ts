@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from "@nestjs/config";
+import { Request } from "express";
 
 export interface TokenPayload {
   userId: number;
@@ -17,13 +18,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly userService: UsersService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => request?.cookies?.Authentication,
+      ]),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey: configService.get("JWT_SECRET"),
     });
   }
 
   async validate(payload: TokenPayload) {
-    return { userId: payload.userId };
+    return this.userService.findOne(payload.userId);
   }
 }
