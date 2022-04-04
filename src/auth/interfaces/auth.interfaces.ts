@@ -8,3 +8,8 @@ export interface TokenPayload {
 export interface RequestWithUser extends Request {
   user: User;
 }
+
+export interface UpdatePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
