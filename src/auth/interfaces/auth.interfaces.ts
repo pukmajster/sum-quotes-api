@@ -13,3 +13,8 @@ export interface UpdatePasswordDto {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface LoginPayload {
+  email: string
+  password: string
+}

@@ -36,39 +36,21 @@ export class AuthService {
   //   return newUser;
   // }
 
-  public getCookieWithJwtToken(userId: number) {
-    const payload: TokenPayload = { userId };
+  // public getCookieWithJwtToken(userId: number) {
+  //   const payload: TokenPayload = { userId };
 
-    const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      "JWT_EXPIRATION_TIME",
-    )}`;
-  }
+  //   const token = this.jwtService.sign(payload);
+  //   return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+  //     "JWT_EXPIRATION_TIME",
+  //   )}`;
+  // }
 
-  public async getAuthenticatedUser(email: string, plainTextPassword: string) {
-    try {
-      const user = await this.usersService.getByEmail(email);
-      await this.verifyPassword(plainTextPassword, user.password);
-      user.password = undefined;
-      return user;
-    } catch (error) {
-      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
-    }
-  }
-   
-  public async verifyPassword(plainTextPassword: string, hashedPassword: string) {
-    const isPasswordMatching = await bcrypt.compare(
-      plainTextPassword,
-      hashedPassword
-    );
-    if (!isPasswordMatching) {
-      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
-    }
-  }
 
-  public async hashPassword(password: string) {
-    return bcrypt.hash(password, 8);
-  }
+
+
+  // public async hashPassword(password: string) {
+  //   return bcrypt.hash(password, 8);
+  // }
 
   public async register(registerData: CreateUserDto) {
     // const hashedPassword = await this.hashPassword(registerData.password,);
@@ -96,8 +78,59 @@ export class AuthService {
     }
   }
 
+  public getCookieWithJwtAccessToken(userId: number, isSecondFactorAuthenticated = false) {
+    const payload: TokenPayload = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`
+    });
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}`;
+  }
+
+  public getCookieWithJwtRefreshToken(userId: number) {
+    const payload: TokenPayload = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')}s`
+    });
+    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')}`;
+    return {
+      cookie,
+      token
+    }
+  }
+
   public getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  }
+
+  public async getAuthenticatedUser(email: string, plainTextPassword: string) {
+    try {
+      const user = await this.usersService.getByEmail(email);
+      await this.verifyPassword(plainTextPassword, user.password);
+      return user;
+    } catch (error) {
+      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
+    }
+  }
+     
+  public async verifyPassword(plainTextPassword: string, hashedPassword: string) {
+    const isPasswordMatching = await bcrypt.compare(
+      plainTextPassword,
+      hashedPassword
+    );
+    if (!isPasswordMatching) {
+      throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  public async getUserFromAuthenticationToken(token: string) {
+    const payload: TokenPayload = this.jwtService.verify(token, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET')
+    });
+    if (payload.userId) {
+      return this.usersService.getById(payload.userId);
+    }
   }
 
   // async getById(id: number) {
