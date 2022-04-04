@@ -27,7 +27,7 @@ import { LocalAuthGuard } from './local-auth.guard';
       }),
     }),
   ],
-  providers: [AuthService, LocalAuthGuard, JwtModule],
+  providers: [AuthService, LocalStrategy, JwtModule],
   exports: [AuthService],
   controllers: [AuthController]
 })

@@ -54,11 +54,11 @@ export class UsersService {
   }
 
   async setCurrentRefreshToken(refreshToken: string, userId: number) {
-    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    await this.usersRepository.update(userId, {
+    // const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    // await this.usersRepository.update(userId, {
 
-      // @ts-expect-error
-      currentHashedRefreshToken
-    });
+    //   // @ts-expect-error
+    //   currentHashedRefreshToken
+    // });
   }
 }

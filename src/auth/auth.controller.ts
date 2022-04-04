@@ -8,6 +8,7 @@ import {
   Post,
   Req,
   Res,
+  Get,
   UseGuards,
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/user.dto";
@@ -18,16 +19,21 @@ import JwtAuthGuard from "./jwt-auth.guard";
 import { UsersService } from "src/users/users.service";
 import * as bcrypt from 'bcrypt';
 
-@Controller("auth")
+@Controller("")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private usersService: UsersService,
   ) {}
 
-  @Post("/signup")
+  @Post("signup")
   async register(@Body() registrationData: CreateUserDto) {
     return this.authService.register(registrationData);
+  }
+
+  @Get('hia')
+  async welcome() {
+    return 'hi';
   }
 
   // @HttpCode(200)
