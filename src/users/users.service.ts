@@ -31,13 +31,11 @@ export class UsersService {
   }
 
   async getByEmail(email: string) {
-    const user = this.usersRepository.findOne();
-
+    const user = await this.usersRepository.findOne({ email });
     if (user) {
       return user;
     }
-
-    throw new HttpException("User not found!", HttpStatus.NOT_FOUND);
+    throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
   }
 
   async getById(id: number) {

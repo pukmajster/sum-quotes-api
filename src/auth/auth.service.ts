@@ -18,23 +18,23 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private readonly configService: ConfigService,
-    @InjectRepository(User)
-    private usersRepository: Repository<User>
+    // @InjectRepository(User)
+    // private usersRepository: Repository<User>
   ) {}
 
-  async getByEmail(email: string) {
-    const user = await this.usersRepository.findOne({ email });
-    if (user) {
-      return user;
-    }
-    throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
-  }
+  // async getByEmail(email: string) {
+  //   const user = await this.usersRepository.findOne({ email });
+  //   if (user) {
+  //     return user;
+  //   }
+  //   throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
+  // }
  
-  async create(userData: CreateUserDto) {
-    const newUser = await this.usersRepository.create(userData);
-    await this.usersRepository.save(newUser);
-    return newUser;
-  }
+  // async create(userData: CreateUserDto) {
+  //   const newUser = await this.usersRepository.create(userData);
+  //   await this.usersRepository.save(newUser);
+  //   return newUser;
+  // }
 
   public getCookieWithJwtToken(userId: number) {
     const payload: TokenPayload = { userId };
@@ -71,7 +71,8 @@ export class AuthService {
   }
 
   public async register(registerData: CreateUserDto) {
-    const hashedPassword = await this.hashPassword(registerData.password);
+    // const hashedPassword = await this.hashPassword(registerData.password,);
+    const hashedPassword = await bcrypt.hash(registerData.password, 10);
 
     try {
       const createdUser = await this.usersService.create({
@@ -99,13 +100,13 @@ export class AuthService {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
   }
 
-  async getById(id: number) {
-    const user = await this.usersRepository.findOne({ id });
-    if (user) {
-      return user;
-    }
-    throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
-  }
+  // async getById(id: number) {
+  //   const user = await this.usersRepository.findOne({ id });
+  //   if (user) {
+  //     return user;
+  //   }
+  //   throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
+  // }
 
 /*   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
