@@ -18,7 +18,7 @@ export class User {
   @Column({ type: "varchar" })
   password: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   quote: string;
 
   // Caclulated every time a user either upvotes or downvotes a quote
