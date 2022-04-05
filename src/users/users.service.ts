@@ -4,6 +4,7 @@ import { CreateUserDto } from 'src/auth/dto/user.dto';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { UpdateProfileDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -52,6 +53,20 @@ export class UsersService {
     user.password = newPassword;
 
     await this.usersRepository.save(user);
+  }
+
+  async updateProfile(userId: number, newProfile: UpdateProfileDto) {
+
+    const hashedPassword = await bcrypt.hash(newProfile.password, 10);
+
+    await this.usersRepository.update(userId, {
+      password: hashedPassword,
+      email: newProfile.email,
+      firstName: newProfile.firstName,
+      lastName: newProfile.lastName
+    })
+
+
   }
 
   // async setCurrentRefreshToken(refreshToken: string, userId: number) {

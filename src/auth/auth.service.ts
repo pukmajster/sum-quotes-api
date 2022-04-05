@@ -57,7 +57,6 @@ export class AuthService {
       expiresIn: `${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`
     });
     console.log(token);
-    return token;
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}`;
   }
 
@@ -85,12 +84,12 @@ export class AuthService {
     }
   }
 
-  public async getUserFromAuthenticationToken(token: string) {
-    const payload: TokenPayload = this.jwtService.verify(token, {
-      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET')
-    });
-    if (payload.user.id) {
-      return this.usersService.getById(payload.user.id);
-    }
-  }
+  // public async getUserFromAuthenticationToken(token: string) {
+  //   const payload: TokenPayload = this.jwtService.verify(token, {
+  //     secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET')
+  //   });
+  //   if (payload.user.id) {
+  //     return this.usersService.getById(payload.user.id);
+  //   }
+  // }
 }
