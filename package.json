@@ -38,6 +38,7 @@
     "@nestjs/typeorm": "^8.0.3",
     "@types/bcrypt": "^5.0.0",
     "bcrypt": "^5.0.1",
+    "class-transformer": "^0.5.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "passport": "^0.5.2",

@@ -10,7 +10,7 @@ import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), ConfigModule],
-  providers: [UsersService, JwtStrategy, LocalAuthGuard],
+  providers: [UsersService, JwtStrategy, LocalAuthGuard,],
   controllers: [UsersController],
   exports: [UsersService]
 })

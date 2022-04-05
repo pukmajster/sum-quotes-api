@@ -9,6 +9,8 @@ import { configService } from './config/config.service';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import * as Joi from "@hapi/joi";
+import { AuthService } from './auth/auth.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [

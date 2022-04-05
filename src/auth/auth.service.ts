@@ -22,35 +22,7 @@ export class AuthService {
     // private usersRepository: Repository<User>
   ) {}
 
-  // async getByEmail(email: string) {
-  //   const user = await this.usersRepository.findOne({ email });
-  //   if (user) {
-  //     return user;
-  //   }
-  //   throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
-  // }
- 
-  // async create(userData: CreateUserDto) {
-  //   const newUser = await this.usersRepository.create(userData);
-  //   await this.usersRepository.save(newUser);
-  //   return newUser;
-  // }
 
-  // public getCookieWithJwtToken(userId: number) {
-  //   const payload: TokenPayload = { userId };
-
-  //   const token = this.jwtService.sign(payload);
-  //   return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-  //     "JWT_EXPIRATION_TIME",
-  //   )}`;
-  // }
-
-
-
-
-  // public async hashPassword(password: string) {
-  //   return bcrypt.hash(password, 8);
-  // }
 
   public async register(registerData: CreateUserDto) {
     // const hashedPassword = await this.hashPassword(registerData.password,);
@@ -78,26 +50,15 @@ export class AuthService {
     }
   }
 
-  public getCookieWithJwtAccessToken(userId: number, isSecondFactorAuthenticated = false) {
-    const payload: TokenPayload = { userId };
+  public getCookieWithJwtAccessToken(user: User, isSecondFactorAuthenticated = false) {
+    const payload: TokenPayload = { user };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: `${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`
     });
+    console.log(token);
+    return token;
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}`;
-  }
-
-  public getCookieWithJwtRefreshToken(userId: number) {
-    const payload: TokenPayload = { userId };
-    const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: `${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')}s`
-    });
-    const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME')}`;
-    return {
-      cookie,
-      token
-    }
   }
 
   public getCookieForLogOut() {
@@ -128,32 +89,8 @@ export class AuthService {
     const payload: TokenPayload = this.jwtService.verify(token, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET')
     });
-    if (payload.userId) {
-      return this.usersService.getById(payload.userId);
+    if (payload.user.id) {
+      return this.usersService.getById(payload.user.id);
     }
   }
-
-  // async getById(id: number) {
-  //   const user = await this.usersRepository.findOne({ id });
-  //   if (user) {
-  //     return user;
-  //   }
-  //   throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
-  // }
-
-/*   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  } 
-
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }*/
 }

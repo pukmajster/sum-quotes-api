@@ -42,6 +42,7 @@ export class UsersService {
   async getById(id: number) {
     const user = await this.usersRepository.findOne({ id });
     if (user) {
+      user.password = null;
       return user;
     }
     throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
@@ -53,12 +54,12 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  async setCurrentRefreshToken(refreshToken: string, userId: number) {
-    // const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    // await this.usersRepository.update(userId, {
+  // async setCurrentRefreshToken(refreshToken: string, userId: number) {
+  //   const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+  //   await this.usersRepository.update(userId, {
 
-    //   // @ts-expect-error
-    //   currentHashedRefreshToken
-    // });
-  }
+  //     // @ts-expect-error
+  //     currentHashedRefreshToken
+  //   });
+  // }
 }

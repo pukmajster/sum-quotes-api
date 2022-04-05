@@ -31,37 +31,17 @@ export class AuthController {
     return this.authService.register(registrationData);
   }
 
-  @Get('hia')
-  async welcome() {
-    return 'hi';
-  }
-
-  // @HttpCode(200)
-  // @Post('login')
-  // async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
-  //   const {user} = request;
-  //   const cookie = this.authService.getCookieWithJwtToken(user.id);
-  //   response.setHeader('Set-Cookie', cookie);
-  //   user.password = undefined;
-  //   return response.send(user);
-  // }
-
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async logIn(@Req() request: RequestWithUser) {
     const { user } = request;
-    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(user.id);
-    const {
-      cookie: refreshTokenCookie,
-      token: refreshToken
-    } = this.authService.getCookieWithJwtRefreshToken(user.id);
-
-    await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
-
-    request.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
-
-    return user;
+    console.log(user);
+    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(user);
+    console.log('token:', accessTokenCookie);
+    
+    request.res.setHeader('Set-Cookie', [accessTokenCookie]);
+    return {token: accessTokenCookie};
   }
 
   @UseGuards(JwtAuthGuard)
@@ -72,7 +52,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  // @Get()
+  @Get('user')
   authenticate(@Req() request: RequestWithUser) {
     const user = request.user;
     user.password = undefined;
