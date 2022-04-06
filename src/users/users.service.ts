@@ -67,10 +67,10 @@ export class UsersService {
     })
   }
 
+  // -------------------------------------------------------
+  //  Quotes
+  // -------------------------------------------------------
   async createQuote(userId: number, quote: string) {
-
-    console.log('updaing cote');
-    
     await this.usersRepository.update(userId, {
       quote,
       score: 0,
@@ -82,7 +82,6 @@ export class UsersService {
   }
 
   async deleteQuote(userId: number) {
-
     await this.usersRepository.update(userId, {
       quote: null,
       score: 0,
@@ -92,6 +91,67 @@ export class UsersService {
       lastChangedDateTime: 'now()'
     })
   }
+  
+  // Toggles the upvote status of a quote and removes any potential downvote
+  async upvoteQuote(userId: number, quoteUserId: number) {
+    let quoteUser = await this.usersRepository.findOne(quoteUserId);
+
+    if(quoteUser.quote == null) return;
+
+    // Clear any downvotes
+    let downvotes = [...quoteUser.downvotes];
+    if(downvotes.includes(userId)) {
+      downvotes.filter(entry => entry != userId);
+    }
+
+    // Toggle the upvote
+    let upvotes = [...quoteUser.upvotes];
+    if(upvotes.includes(userId)) {
+      upvotes.filter(entry => entry != userId);
+    } else {
+      upvotes.push(userId);
+    }
+
+    // Calculates the score
+    let score = upvotes.length - downvotes.length;
+
+    await this.usersRepository.update(quoteUserId, {
+      score,
+      downvotes,
+      upvotes,
+    })
+  }
+
+  // Toggles the downvote status of a quote and removes any potential upvote
+  async downvoteQuote(userId: number, quoteUserId: number) {
+    let quoteUser = await this.usersRepository.findOne(quoteUserId);
+
+    if(quoteUser.quote == null) return;
+
+    // Clear any downvotes
+    let upvotes = [...quoteUser.upvotes];
+    if(upvotes.includes(userId)) {
+      upvotes.filter(entry => entry != userId);
+    }
+
+    // Toggle the upvote
+    let downvotes = [...quoteUser.downvotes];
+    if(downvotes.includes(userId)) {
+      downvotes.filter(entry => entry != userId);
+    } else {
+      downvotes.push(userId);
+    }
+
+    // Calculates the score
+    let score = upvotes.length - downvotes.length;
+
+    await this.usersRepository.update(quoteUserId, {
+      score,
+      downvotes,
+      upvotes,
+    })
+  }
+
 
   // async setCurrentRefreshToken(refreshToken: string, userId: number) {
   //   const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);

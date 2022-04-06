@@ -46,6 +46,24 @@ export class UsersController {
     return this.usersService.deleteQuote(+request.user.id)
   }
 
+  @Post(`quote/:id/upvote`)
+  @UseGuards(JwtAuthGuard)
+  upvoteQuote(
+    @Req() request: RequestWithUser,
+    @Param("id") id: string
+  ) {
+    return this.usersService.upvoteQuote(+request.user.id, +id);
+  }
+
+  @Post(`quote/:id/downvote`)
+  @UseGuards(JwtAuthGuard)
+  downvoteQuote(
+    @Req() request: RequestWithUser,
+    @Param("id") id: string
+  ) {
+    return this.usersService.downvoteQuote(+request.user.id, +id);
+  }
+
 
   // @UseGuards(JwtAuthGuard)
   // @Post("me/update")
