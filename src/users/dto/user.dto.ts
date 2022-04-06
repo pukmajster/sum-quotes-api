@@ -4,3 +4,7 @@ export class UpdateProfileDto {
   password: string
   email: string
 }
+
+export class CreateQuoteDto {
+  quote: string
+}

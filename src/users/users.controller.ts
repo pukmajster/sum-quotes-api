@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { RequestWithUser } from 'src/auth/interfaces/auth.interfaces';
 import JwtAuthGuard from 'src/auth/jwt-auth.guard';
-import { UpdateProfileDto } from './dto/user.dto';
+import { CreateQuoteDto, UpdateProfileDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -28,6 +28,24 @@ export class UsersController {
   ) {
     return this.usersService.updateProfile(+request.user.id, newProfile)
   }
+
+  @Post("quote")
+  @UseGuards(JwtAuthGuard)
+  createQuote(
+    @Req() request: RequestWithUser,
+    @Body() quote: CreateQuoteDto
+  ) {
+    return this.usersService.createQuote(+request.user.id, quote.quote)
+  }
+
+  @Delete("quote")
+  @UseGuards(JwtAuthGuard)
+  deleteQuote(
+    @Req() request: RequestWithUser
+  ) {
+    return this.usersService.deleteQuote(+request.user.id)
+  }
+
 
   // @UseGuards(JwtAuthGuard)
   // @Post("me/update")

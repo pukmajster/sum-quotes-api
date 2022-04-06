@@ -65,8 +65,32 @@ export class UsersService {
       firstName: newProfile.firstName,
       lastName: newProfile.lastName
     })
+  }
 
+  async createQuote(userId: number, quote: string) {
 
+    console.log('updaing cote');
+    
+    await this.usersRepository.update(userId, {
+      quote,
+      score: 0,
+      downvotes: [],
+      upvotes: [],
+      createDateTime: 'now()',
+      lastChangedDateTime: 'now()'
+    })
+  }
+
+  async deleteQuote(userId: number) {
+
+    await this.usersRepository.update(userId, {
+      quote: null,
+      score: 0,
+      downvotes: [],
+      upvotes: [],
+      createDateTime: 'CURRENT_TIMESTAMP',
+      lastChangedDateTime: 'CURRENT_TIMESTAMP'
+    })
   }
 
   // async setCurrentRefreshToken(refreshToken: string, userId: number) {
