@@ -88,8 +88,8 @@ export class UsersService {
       score: 0,
       downvotes: [],
       upvotes: [],
-      createDateTime: 'CURRENT_TIMESTAMP',
-      lastChangedDateTime: 'CURRENT_TIMESTAMP'
+      createDateTime: 'now()',
+      lastChangedDateTime: 'now()'
     })
   }
 
