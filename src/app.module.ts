@@ -30,7 +30,7 @@ import { UsersService } from './users/users.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, UsersService],
+  providers: [],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

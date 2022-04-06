@@ -22,5 +22,4 @@ export class AppController {
   async getLatestQuotes() {
     return this.usersService.getHightestScoringQuotes();
   }
-  
 }
