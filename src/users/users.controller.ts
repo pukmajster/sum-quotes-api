@@ -46,6 +46,15 @@ export class UsersController {
     return this.usersService.deleteQuote(+request.user.id)
   }
 
+  @Get("liked/:id")
+  @UseGuards(JwtAuthGuard)
+  getLikedQuotes(
+    @Req() request: RequestWithUser,
+    @Param("id") id: string
+  ) {
+    return this.usersService.getLikedQuotes(+id)
+  }
+
   @Post(`quote/:id/upvote`)
   @UseGuards(JwtAuthGuard)
   upvoteQuote(
