@@ -101,13 +101,13 @@ export class UsersService {
     // Clear any downvotes
     let downvotes = [...quoteUser.downvotes];
     if(downvotes.includes(userId)) {
-      downvotes.filter(entry => entry != userId);
+      downvotes = downvotes.filter(entry => entry != userId);
     }
 
     // Toggle the upvote
     let upvotes = [...quoteUser.upvotes];
     if(upvotes.includes(userId)) {
-      upvotes.filter(entry => entry != userId);
+      upvotes = upvotes.filter(entry => entry != userId);
     } else {
       upvotes.push(userId);
     }
@@ -131,13 +131,13 @@ export class UsersService {
     // Clear any downvotes
     let upvotes = [...quoteUser.upvotes];
     if(upvotes.includes(userId)) {
-      upvotes.filter(entry => entry != userId);
+      upvotes = upvotes.filter(entry => entry != userId);
     }
 
     // Toggle the upvote
     let downvotes = [...quoteUser.downvotes];
     if(downvotes.includes(userId)) {
-      downvotes.filter(entry => entry != userId);
+      downvotes = downvotes.filter(entry => entry != userId);
     } else {
       downvotes.push(userId);
     }
@@ -169,6 +169,11 @@ export class UsersService {
     });
   }
 
+  async getLikedQuotes(userId: number,) {
+    return await this.usersRepository.createQueryBuilder()
+    .where('users.upvotes && :upvotes', { upvotes: userId })
+    .take(9)
+  }
 
   // async setCurrentRefreshToken(refreshToken: string, userId: number) {
   //   const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
