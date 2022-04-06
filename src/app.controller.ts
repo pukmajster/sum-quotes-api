@@ -13,13 +13,13 @@ export class AppController {
     return 'hi';
   }
 
-  @Get('quotes/hightest-scoring')
+  @Get('quotes/highest-scoring')
   async getHighestScoringQuotes() {
     return this.usersService.getHightestScoringQuotes();
   }
 
   @Get('quotes/latest')
   async getLatestQuotes() {
-    return this.usersService.getHightestScoringQuotes();
+    return this.usersService.getLatestQuotes();
   }
 }
