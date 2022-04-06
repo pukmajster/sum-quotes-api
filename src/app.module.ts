@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import * as Joi from "@hapi/joi";
 import { AuthService } from './auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UsersService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

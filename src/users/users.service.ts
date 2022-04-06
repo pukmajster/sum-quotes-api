@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/auth/dto/user.dto';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { UpdateProfileDto } from './dto/user.dto';
@@ -150,6 +150,23 @@ export class UsersService {
       downvotes,
       upvotes,
     })
+  }
+
+  // Returns 9 of the highest scoring quotes
+  async getHightestScoringQuotes() {
+    return await this.usersRepository.find({
+      where: { quote: Like("%") },
+      order: { score: "DESC" },
+      take: 9
+    });
+  }
+
+  async getLatestQuotes() {
+    return await this.usersRepository.find({
+      where: { quote: Like("%") },
+      order: { createDateTime: "DESC" },
+      take: 9
+    });
   }
 
 
