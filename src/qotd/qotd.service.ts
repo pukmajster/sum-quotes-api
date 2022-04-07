@@ -49,10 +49,16 @@ export class QotdService {
   }
 
   async getLatestQotd() {
-    const quote = await this.qotdRepository.createQueryBuilder('qotd')
+    const qotd = await this.qotdRepository.createQueryBuilder('qotd')
     .orderBy('"createDateTime"', 'DESC')
     .getOne();
 
-    return quote;
+    try {
+      const quote = await this.usersService.findOne(qotd.quoteId);
+      return quote;
+    } catch(e) {
+      console.log('possibly deleted qotd!');
+    }
+
   }
 }
