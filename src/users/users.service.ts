@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/auth/dto/user.dto';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { UpdateProfileDto } from './dto/user.dto';
@@ -169,10 +169,9 @@ export class UsersService {
     });
   }
 
-  async getLikedQuotes(userId: number,) {
-    return await this.usersRepository.createQueryBuilder()
-    .where('users.upvotes && :upvotes', { upvotes: userId })
-    .take(9)
+  // This is vERY VERY VERY VERY --- V E R Y --- BAD but it ⭐ works ⭐
+  async getLikedQuotes(userId: number) {
+    return await this.usersRepository.query('SELECT * FROM "user" WHERE $1 = ANY("user".upvotes)', [userId]);
   }
 
   // async setCurrentRefreshToken(refreshToken: string, userId: number) {
