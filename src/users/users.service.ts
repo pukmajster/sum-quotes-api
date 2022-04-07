@@ -186,6 +186,12 @@ export class UsersService {
     return await this.usersRepository.query('SELECT * FROM "user" WHERE $1 = ANY("user".upvotes)', [userId]);
   }
 
+  async getRandomQuote() {
+    return await this.usersRepository.createQueryBuilder()
+    .orderBy('RANDOM()')
+    .getOne()
+  }
+
   // async setCurrentRefreshToken(refreshToken: string, userId: number) {
   //   const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
   //   await this.usersRepository.update(userId, {

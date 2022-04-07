@@ -12,11 +12,14 @@ import * as Joi from "@hapi/joi";
 import { AuthService } from './auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersService } from './users/users.service';
+import { QotdController } from './qotd/qotd.controller';
+import { QotdModule } from './qotd/qotd.module';
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
+    QotdModule,
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
@@ -29,7 +32,7 @@ import { UsersService } from './users/users.service';
       }),
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, QotdController],
   providers: [],
 })
 export class AppModule {
