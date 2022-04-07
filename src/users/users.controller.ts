@@ -47,7 +47,7 @@ export class UsersController {
   }
 
   @Get("liked/:id")
-  @UseGuards(JwtAuthGuard)
+
   getLikedQuotes(
     @Req() request: RequestWithUser,
     @Param("id") id: string
