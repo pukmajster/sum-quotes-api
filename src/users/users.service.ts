@@ -71,14 +71,26 @@ export class UsersService {
   //  Quotes
   // -------------------------------------------------------
   async createQuote(userId: number, quote: string) {
-    await this.usersRepository.update(userId, {
-      quote,
-      score: 0,
-      downvotes: [],
-      upvotes: [],
-      createDateTime: 'now()',
-      lastChangedDateTime: 'now()'
-    })
+
+    const alreadyExists = (await (await this.usersRepository.findOne(userId)).quote) != null;
+    
+    await this.usersRepository.update(userId, 
+      alreadyExists
+      ?
+      {
+        quote,
+        lastChangedDateTime: 'now()'
+      }
+      :
+      {
+        quote,
+        score: 0,
+        downvotes: [],
+        upvotes: [],
+        createDateTime: 'now()',
+        lastChangedDateTime: 'now()'
+      }
+    )
   }
 
   async deleteQuote(userId: number) {
