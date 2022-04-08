@@ -20,9 +20,11 @@ export class QotdService {
 
   private readonly logger = new Logger(QotdService.name);
 
-  @Cron(CronExpression.EVERY_DAY_AT_8PM)
+  @Cron(CronExpression.EVERY_DAY_AT_6PM)
   handleCron() {
     this.createNewQotd();
+    console.log('new qotd!');
+    
   }
 
   async create(createQotdDto: CreateQotdDto) {

@@ -5,9 +5,10 @@ import { QotdService } from './qotd.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Qotd } from './qotd.entity';
 import { UsersModule } from 'src/users/users.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Qotd]), UsersModule],
+  imports: [TypeOrmModule.forFeature([Qotd]), ScheduleModule.forRoot(), UsersModule],
   providers: [QotdService],
   controllers: [QotdController],
   exports: [QotdService]
