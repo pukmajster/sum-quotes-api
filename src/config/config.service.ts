@@ -31,6 +31,8 @@ class ConfigService {
     return mode != 'DEV';
   }
 
+  // entities: ['**/*.entity{.ts,.js}'],
+  // migrations: ['src/migration/**/*.{ts, js}'],
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
@@ -39,18 +41,23 @@ class ConfigService {
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DB'),
-
-      entities: ['**/*.entity{.ts,.js}'],
+      
+      entities: ['dist/**/*.entity{.ts,.js}'],
       migrationsTableName: 'migration',
-      migrations: ['src/migration/*.ts'],
+      migrations: ['dist/migration/**/*.js'],
 
       synchronize: false,
-
+      
       cli: {
         migrationsDir: 'src/migration',
       },
 
       ssl: this.isProduction(),
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     };
   }
 

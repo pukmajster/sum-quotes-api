@@ -1,19 +1,14 @@
-# Image source
-FROM node:14
-
-# Docker working directory
+FROM node:16.5.0 AS builder
 WORKDIR /app
-
-# Copying file into APP directory of docker
-COPY ./package.json ./package-lock.json /app/
-
-# Then install the NPM module
+COPY ./package.json ./
 RUN npm install
-
-# Copy current directory to APP folder
-COPY . /app
-
+COPY . .
 RUN npm run build
 
+
+FROM node:16.5.0-alpine
+WORKDIR /app
+COPY --from=builder /app ./
 EXPOSE 8000
 CMD ["npm", "run", "start:prod"]
+
