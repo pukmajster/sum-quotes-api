@@ -3,7 +3,7 @@
 #!/bin/bash
 set -e
 
-SERVER="quotes-dev";
+SERVER="quotes-server";
 PW="root";
 DB="quotes-db";
 
