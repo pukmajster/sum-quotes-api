@@ -37,7 +37,6 @@ export class AuthController {
   async logIn(@Req() request: RequestWithUser) {
     const { user } = request;
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(user);
-    console.log('token:', accessTokenCookie);
     
     request.res.setHeader('Set-Cookie', [accessTokenCookie]);
     return {token: accessTokenCookie};
